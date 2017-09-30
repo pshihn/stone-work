@@ -21,7 +21,7 @@ export class Tiler {
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.style.display = "block";
     svg.setAttribute("width", "100%");
-    svg.setAttribute("height", "100%");
+    svg.setAttribute("height", "0px");
     this._root.appendChild(svg);
     return svg;
   }

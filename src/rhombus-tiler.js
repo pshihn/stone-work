@@ -16,6 +16,7 @@ export class RhombusTiler extends Tiler {
   clear() {
     super.clear();
     this.svg = this.createSvgRoot();
+    this.svgHeight = 0;
   }
 
   add(node, options) {
@@ -24,13 +25,16 @@ export class RhombusTiler extends Tiler {
     let polygon = this.createSvgNode("polygon", {
       points: this._getPolygonPoints()
     });
-    polygon.style.transform = this._getPolygonTransform(cell);
+    let xy = this._cellRectPosition(cell);
+    polygon.style.transform = "translate(" + xy[0] + "px," + xy[1] + "px)";
     this.svg.appendChild(polygon);
     this.applyPanelStyles(polygon, options);
 
+    let svgHeight = xy[1] + this.cellHeight;
+    if (svgHeight > this.svgHeight) {
+      this.svg.setAttribute("height", svgHeight + "px");
+    }
     this.addToColumn(cell[0], node);
-
-    // <polygon points="60,20 100,40 100,80 60,100 20,80 20,40"/>
   }
 
   _getPolygonTransform(cell) {

@@ -9,13 +9,9 @@
       font-family: 'Roboto', sans-serif;
       font-size: 11pt;
       line-height: 1.5;
-    }
-
-    #toolbar {
-      background: #213034;
-      color: white;
-      padding: 20px;
-      margin-bottom: 15px;
+      height: 100vh;
+      box-sizing: border-box;
+      position: relative;
     }
 
     #grid {
@@ -28,6 +24,12 @@
       width: 100%;
       box-sizing: border-box;
       text-align: center;
+    }
+
+    h4 {
+      margin: 0;
+      font-weight: 400;
+      font-size: 11pt;
     }
 
     .node {
@@ -43,24 +45,79 @@
     label div {
       font-size: 11px;
     }
+
+    #gridContainer {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 210px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    #toolbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 180px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: #213034;
+      color: white;
+      padding: 10px;
+    }
+
+    #toolbar div {
+      padding: 5px 0;
+    }
+
+    #render {
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      background: lightyellow;
+      height: 40px;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 5px 0 #000;
+    }
   </style>
 </head>
 
 <body>
-  <div id="toolbar">
-    <select id="style">
-      <option value="square">Square</option>
-      <option value="rhombus">Rhombus</option>
-    </select>
-    <label><input id="chkColor" type="checkbox" checked> Background color</label>
-    <label><input id="chkImager" type="checkbox"> Background image</label>
-    <label style="display: inline-block; margin: 0 5px;">
-      <div>Cell Spacing</div>
-      <input style="width: 82px;" id="cspacing" type="number" value="0">
-    </label>
-    <button onclick="render()">Render</button>
+  <div id="gridContainer">
+    <div id="grid"></div>
   </div>
-  <div id="grid"></div>
+  <div id="toolbar">
+    <div>
+      <button id="render" onclick="render()">Render</button>
+    </div>
+    <div>
+      <h4>Cell Count</h4>
+      <input id="ccount" type="number" value="18">
+    </div>
+    <div>
+      <h4>Style</h4>
+      <select id="style">
+        <option value="square">Square</option>
+        <option value="rhombus">Rhombus</option>
+      </select>
+    </div>
+    <div>
+      <label><input id="chkColor" type="checkbox" checked> BG color</label>
+    </div>
+    <div>
+      <label><input id="chkImager" type="checkbox"> BG image</label>
+    </div>
+    <div>
+      <h4>Cell Spacing</h4>
+      <input id="cspacing" type="number" value="0">
+    </div>
+  </div>
+
   <script>
     function $$(id) {
       return document.getElementById(id);
@@ -94,7 +151,7 @@
       let gridType = styleSelector.options[styleSelector.selectedIndex].value;
       sw = new StoneWork(grid, gridType, createGridOptions());
       window._sw = sw;
-      let count = 18;
+      let count = +$$('ccount').value;
       for (let i = 0; i < count; i++) {
         let n = document.createElement("div");
         let h = document.createElement('h3');
