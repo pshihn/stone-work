@@ -97,7 +97,15 @@
     </div>
     <div>
       <h4>Cell Count</h4>
-      <input id="ccount" type="number" value="18">
+      <input id="ccount" type="number" value="36">
+    </div>
+    <div>
+      <h4>Cell Width</h4>
+      <input id="cwidth" type="number" value="300">
+    </div>
+    <div>
+      <h4>Cell Height</h4>
+      <input id="cheight" type="number" value="300">
     </div>
     <div>
       <h4>Style</h4>
@@ -128,6 +136,14 @@
       let cs = +$$('cspacing').value;
       if (cs) {
         options.cellSpacing = cs;
+      }
+      let cw = +$$('cwidth').value;
+      let ch = +$$('cheight').value;
+      if (cw && cw > 0) {
+        options.cellWidth = cw;
+      }
+      if (ch && ch > 0) {
+        options.cellHeight = ch;
       }
       return options;
     }
