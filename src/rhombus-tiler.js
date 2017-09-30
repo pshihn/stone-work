@@ -72,9 +72,16 @@ export class RhombusTiler extends Tiler {
   }
 
   applyPanelStyles(panel, options) {
-    panel.style.stroke = "#000";
-    panel.style.strokeWidth = "2";
-    panel.style.fill = "transparent";
+    let style = panel.style;
+
+    // style.stroke = "#000";
+    // style.strokeWidth = "2";
+
+    if (options.backgroundColor) {
+      style.fill = options.backgroundColor;
+    } else {
+      style.fill = "transparent";
+    }
   }
 }
 
