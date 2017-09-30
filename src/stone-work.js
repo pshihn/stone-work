@@ -1,5 +1,6 @@
 import { TilerRegistry } from './tiler';
 import { SquareTiler } from './square-tiler';
+import { RhombusTiler } from './rhombus-tiler';
 
 export class StoneWork {
   constructor(element, tilerType, options) {
@@ -27,8 +28,8 @@ export class StoneWork {
     this._tiler = new classType(element, options);
   }
 
-  add(node) {
-    this._tiler.add(node);
+  add(node, options) {
+    this._tiler.add(node, options);
   }
 
   clear() {

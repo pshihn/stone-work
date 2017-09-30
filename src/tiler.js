@@ -17,6 +17,23 @@ export class Tiler {
     this.clear();
   }
 
+  createSvgRoot() {
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.style.display = "block";
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("height", "100%");
+    this._root.appendChild(svg);
+    return svg;
+  }
+
+  createSvgNode(nodeName, attributes) {
+    let e = document.createElementNS("http://www.w3.org/2000/svg", nodeName);
+    for (var key in attributes) {
+      e.setAttributeNS(null, key, attributes[key]);
+    }
+    return e;
+  }
+
   _clearNode(node) {
     while (node.hasChildNodes()) {
       node.removeChild(node.lastChild);
@@ -31,7 +48,7 @@ export class Tiler {
     this.computeSizes();
   }
 
-  computeSizes() {
+  computeColumnCount() {
     let totalWidth = this._root.offsetWidth;
     this._colCount = Math.max(1, Math.floor(totalWidth / this.cellWidth));
     if (this._colCount > 1) {
@@ -40,7 +57,10 @@ export class Tiler {
         this._colCount--;
       }
     }
-    console.log("colCount", this.colCount);
+  }
+
+  computeSizes() {
+    this.computeColumnCount();
     this._columns = [];
     this._columnHeights = [];
     for (let i = 0; i < this._colCount; i++) {
@@ -93,7 +113,7 @@ export class Tiler {
     }
   }
 
-  add(node) {
+  add(node, options) {
   }
 
   applyPanelStyles(panel, options) {
