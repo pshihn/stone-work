@@ -1,0 +1,29 @@
+{
+  "name": "stone-work",
+  "version": "1.0.0",
+  "description": "An alternative take on grid layouts ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pshihn/stone-work.git"
+  },
+  "keywords": [
+    "grid",
+    "grid",
+    "layout",
+    "layout"
+  ],
+  "author": "Preet Shihn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pshihn/stone-work/issues"
+  },
+  "homepage": "https://github.com/pshihn/stone-work#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-rollup": "^6.0.0"
+  }
+}
