@@ -22,6 +22,7 @@ export class RhombusTiler extends Tiler {
   add(node, options) {
     let cell = this.nextCell;
 
+    // create base panel
     let polygon = this.createSvgNode("polygon", {
       points: this._getPolygonPoints()
     });
@@ -30,11 +31,50 @@ export class RhombusTiler extends Tiler {
     this.svg.appendChild(polygon);
     this.applyPanelStyles(polygon, options);
 
+    // Update svg height
     let svgHeight = xy[1] + this.cellHeight;
     if (svgHeight > this.svgHeight) {
       this.svg.setAttribute("height", svgHeight + "px");
     }
+
+    // add node
+    let nodeRect = this._getNodeRect(xy);
+    node.classList.add('sw-cell-content');
+    node.style.position = "absolute";
+    node.style.left = nodeRect[0];
+    node.style.top = nodeRect[1];
+    node.style.width = nodeRect[2] + "px";
+    node.style.height = nodeRect[3] + "px";
+    this._root.appendChild(node);
+
     this.addToColumn(cell[0], node);
+  }
+
+  _getNodeRect(pos) {
+    let hw = this.cellWidth / 2;
+    let hh = this.cellHeight / 2;
+    let c = [pos[0] + hw, pos[1] + hh];
+    let x = (this.cellWidth / 2) / Math.sqrt(2);
+    let y = (this.cellHeight / 2) / Math.sqrt(2);
+    let rect = [c[0] - x, c[1] - y, 2 * x, 2 * y];
+    let slope = -hh / hw;
+    let offset = pos[1] - (slope * (pos[0] + hw));
+    let d = Math.abs(slope * rect[0] - rect[1] + offset) / Math.sqrt(slope * slope + 1);
+
+    let p0 = rect[0];
+    let p1 = rect[1];
+    let qa = 1 + Math.pow(slope, 2);
+    let qb = 2 * ((slope * offset) - (slope * p1) - p0);
+    let qc = Math.pow(p0, 2) - Math.pow(d, 2) + Math.pow((offset - p1), 2);
+    let x0 = (-qb + Math.sqrt(Math.abs((qb * qb) - (4 * qa * qc)))) / (2 * qa);
+    let y0 = slope * x0 + offset;
+    let dx = x0 - p0;
+    let dy = y0 - p1;
+    rect[0] = x0;
+    rect[1] = y0;
+    rect[2] = rect[2] - 2 * dx;
+    rect[3] = rect[3] - 2 * dy;
+    return rect;
   }
 
   _getPolygonTransform(cell) {
