@@ -1,0 +1,6 @@
+{
+  "name": "stonework",
+  "short_name": "stonework",
+  "start_url": "/",
+  "display": "standalone"
+}

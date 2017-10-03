@@ -1,0 +1,186 @@
+<html>
+
+<head>
+  <title>StoneWork demo</title>
+  <script src="../dist/stone-work.es6.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      height: 100vh;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    #grid {
+      position: relative;
+    }
+
+    h3 {
+      margin: 0;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    h4 {
+      margin: 0;
+      font-weight: 400;
+      font-size: 11pt;
+    }
+
+    .node {
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      -webkit-box-align: center;
+      align-items: center;
+    }
+
+    label div {
+      font-size: 11px;
+    }
+
+    #gridContainer {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 210px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    #toolbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 180px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: #213034;
+      color: white;
+      padding: 10px;
+    }
+
+    #toolbar div {
+      padding: 5px 0;
+    }
+
+    #render {
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      background: lightyellow;
+      height: 40px;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 5px 0 #000;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="gridContainer">
+    <div id="grid"></div>
+  </div>
+  <div id="toolbar">
+    <div>
+      <button id="render" onclick="render()">Render</button>
+    </div>
+    <div>
+      <h4>Cell Count</h4>
+      <input id="ccount" type="number" value="36">
+    </div>
+    <div>
+      <h4>Cell Width</h4>
+      <input id="cwidth" type="number" value="300">
+    </div>
+    <div>
+      <h4>Cell Height</h4>
+      <input id="cheight" type="number" value="300">
+    </div>
+    <div>
+      <h4>Style</h4>
+      <select id="style">
+        <option value="square">Square</option>
+        <option value="rhombus" selected>Rhombus</option>
+      </select>
+    </div>
+    <div>
+      <label><input id="chkColor" type="checkbox" checked> BG color</label>
+    </div>
+    <div>
+      <label><input id="chkImage" type="checkbox"> BG image</label>
+    </div>
+    <div>
+      <h4>Cell Spacing</h4>
+      <input id="cspacing" type="number" value="0">
+    </div>
+  </div>
+
+  <script>
+    function $$(id) {
+      return document.getElementById(id);
+    }
+
+    function createGridOptions() {
+      let options = {};
+      let cs = +$$('cspacing').value;
+      if (cs) {
+        options.cellSpacing = cs;
+      }
+      let cw = +$$('cwidth').value;
+      let ch = +$$('cheight').value;
+      if (cw && cw > 0) {
+        options.cellWidth = cw;
+      }
+      if (ch && ch > 0) {
+        options.cellHeight = ch;
+      }
+      return options;
+    }
+
+    function createNodeOptions() {
+      let options = {};
+      if ($$('chkColor').checked) {
+        options.backgroundColor = "rgb(" + Math.floor(100 + Math.random() * 155) + "," + Math.floor(100 + Math.random() * 155) + "," + Math.floor(100 + Math.random() * 155) + ")";
+      }
+      if ($$('chkImage').checked) {
+        options.backgroundImage = 'images/bg' + Math.round(Math.random() * 7 + 1) + ".jpg";
+      }
+      return options;
+    }
+
+    function render() {
+      let sw;
+      if (window._sw) {
+        sw = window._sw;
+        sw.clear();
+      }
+      let grid = document.getElementById("grid");
+      let styleSelector = $$('style');
+      let gridType = styleSelector.options[styleSelector.selectedIndex].value;
+      sw = new StoneWork(grid, gridType, createGridOptions());
+      window._sw = sw;
+      let count = +$$('ccount').value;
+      for (let i = 0; i < count; i++) {
+        let n = document.createElement("div");
+        let h = document.createElement('h3');
+        h.textContent = "TITLE " + i;
+        n.appendChild(h);
+        n.classList.add("node");
+        sw.add(n, createNodeOptions());
+      }
+    }
+  </script>
+</body>
+
+</html>

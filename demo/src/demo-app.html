@@ -1,0 +1,185 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+
+<dom-module id="demo-app">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
+       :host {
+        display: block;
+      }
+
+      h3 {
+        margin: 0;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      #grid {
+        position: relative;
+      }
+
+      .node {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        align-items: center;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #shell {
+        height: 100vh;
+      }
+
+      #toolbar {
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #f0f0f0;
+        padding: 10px;
+        box-sizing: border-box;
+        height: 100%;
+        margin-right: 2px;
+        border-right: 1px solid #e5e5e5;
+      }
+
+      #gridContainer {
+        box-sizing: border-box;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      #cellWidth,
+      #cellHeight,
+      #cellSpacing,
+      #cellCount {
+        width: 90px;
+        display: inline-block;
+        box-sizing: border-box;
+      }
+
+      #cellSpacing,
+      #cellWidth {
+        margin-right: 8px;
+      }
+
+      paper-checkbox {
+        margin: 10px 10px 5px 0;
+      }
+    </style>
+    <div id="shell" class="horizontal layout">
+      <div id="toolbar">
+        <paper-dropdown-menu-light id="gridType" label="Grid Type" on-selected-item-changed="refresh">
+          <paper-listbox slot="dropdown-content" class="dropdown-content" selected="0">
+            <paper-item>square</paper-item>
+            <paper-item>rhombus</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu-light>
+        <div>
+          <paper-input id="cellWidth" type="number" label="Cell width" value="300" on-change="refresh"></paper-input>
+          <paper-input id="cellHeight" type="number" label="Cell height" value="300" on-change="refresh"></paper-input>
+        </div>
+        <div>
+          <paper-input id="cellSpacing" type="number" label="Cell spacing" value="0" on-change="refresh"></paper-input>
+          <paper-input id="cellCount" type="number" label="Cell count" value="36" on-change="refresh"></paper-input>
+        </div>
+        <div>
+          <paper-checkbox id="chkColor" checked on-change="refresh">BG Color</paper-checkbox>
+          <paper-checkbox id="chkImage" on-change="onImage">BG Image</paper-checkbox>
+        </div>
+        <div id="overlayPanel" class="hidden">
+          <paper-checkbox id="chkOverlay" checked on-change="refresh">BG Image Overlay</paper-checkbox>
+        </div>
+      </div>
+      <div id="gridContainer" class="flex">
+        <div id="grid"></div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class DemoApp extends Polymer.Element {
+      static get is() { return 'demo-app'; }
+
+      onImage() {
+        if (this.$.chkImage.checked) {
+          this.$.overlayPanel.classList.remove("hidden");
+        } else {
+          this.$.overlayPanel.classList.add("hidden");
+        }
+        this.refresh();
+      }
+
+      refresh() {
+        if (!this.$.gridType.selectedItem) {
+          return;
+        }
+        if (this.sw) {
+          this.sw.clear();
+          this.sw = null;
+        }
+        let gridType = this.$.gridType.selectedItem.textContent.trim();
+        this.sw = new StoneWork(this.$.grid, gridType, this.createGridOptions());
+
+        let count = +this.$.cellCount.value;
+        for (let i = 0; i < count; i++) {
+          let n = document.createElement("div");
+          let h = document.createElement('h3');
+          h.textContent = "TITLE " + i;
+          n.appendChild(h);
+          n.classList.add("node");
+          this.sw.add(n, this.createNodeOptions());
+        }
+      }
+
+      createGridOptions() {
+        let options = {};
+        let cs = +this.$.cellSpacing.value;
+        if (cs) {
+          options.cellSpacing = cs;
+        }
+        let cw = +this.$.cellWidth.value;
+        let ch = +this.$.cellHeight.value;
+        if (cw && cw > 0) {
+          options.cellWidth = cw;
+        }
+        if (ch && ch > 0) {
+          options.cellHeight = ch;
+        }
+        return options;
+      }
+
+      createNodeOptions() {
+        let options = {};
+        if (this.$.chkColor.checked) {
+          options.backgroundColor = "rgb(" + Math.floor(100 + Math.random() * 155) + "," + Math.floor(100 + Math.random() * 155) + "," + Math.floor(100 + Math.random() * 155) + ")";
+        }
+        if (this.$.chkImage.checked) {
+          options.backgroundImage = 'images/bg' + Math.round(Math.random() * 7 + 1) + ".jpg";
+          if (this.$.chkOverlay.checked) {
+            options.overlay = "rgba(255,255,255,0.5)";
+          }
+        }
+        return options;
+      }
+    }
+
+    window.customElements.define(DemoApp.is, DemoApp);
+  </script>
+</dom-module>

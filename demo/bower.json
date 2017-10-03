@@ -1,0 +1,17 @@
+{
+  "name": "stonework",
+  "main": "index.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-flex-layout": "^2.0.0",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
+    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
+    "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.2",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
+    "neon-animation": "PolymerElements/neon-animation#^2.0.1"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  }
+}

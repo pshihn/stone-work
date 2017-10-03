@@ -50,8 +50,8 @@ export class RhombusTiler extends Tiler {
     let nodeRect = this._getNodeRect(xy);
     node.classList.add('sw-cell-content');
     node.style.position = "absolute";
-    node.style.left = nodeRect[0];
-    node.style.top = nodeRect[1];
+    node.style.left = nodeRect[0] + "px";
+    node.style.top = nodeRect[1] + "px";
     node.style.width = nodeRect[2] + "px";
     node.style.height = nodeRect[3] + "px";
     this._root.appendChild(node);
