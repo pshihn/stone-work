@@ -40,7 +40,6 @@
       -webkit-align-items: center;
       -webkit-box-align: center;
       align-items: center;
-      border: 1px solid #000;
     }
 
     label div {
@@ -119,7 +118,7 @@
       <label><input id="chkColor" type="checkbox" checked> BG color</label>
     </div>
     <div>
-      <label><input id="chkImager" type="checkbox"> BG image</label>
+      <label><input id="chkImage" type="checkbox"> BG image</label>
     </div>
     <div>
       <h4>Cell Spacing</h4>
@@ -152,7 +151,10 @@
     function createNodeOptions() {
       let options = {};
       if ($$('chkColor').checked) {
-        options.backgroundColor = "rgb(" + Math.floor(150 + Math.random() * 155) + "," + Math.floor(150 + Math.random() * 155) + "," + Math.floor(150 + Math.random() * 155) + ")";
+        options.backgroundColor = "rgb(" + Math.floor(100 + Math.random() * 155) + "," + Math.floor(100 + Math.random() * 155) + "," + Math.floor(100 + Math.random() * 155) + ")";
+      }
+      if ($$('chkImage').checked) {
+        options.backgroundImage = 'images/bg' + Math.round(Math.random() * 7 + 1) + ".jpg";
       }
       return options;
     }

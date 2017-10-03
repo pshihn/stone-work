@@ -42,7 +42,7 @@ export class SquareTiler extends Tiler {
       style.backgroundSize = "cover";
       style.backgroundOrigin = "border-box";
       style.backgroundPosition = "50% 50%";
-      sttyle.backgroundImage = 'url("' + options.backgroundImage + '")';
+      style.backgroundImage = 'url("' + options.backgroundImage + '")';
     }
   }
 }
