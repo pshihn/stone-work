@@ -10,7 +10,16 @@ export class RhombusTiler extends Tiler {
         this._colCount--;
       }
     }
-    this._colCount += this._colCount - 1;
+    this._colwrap = this.colCount - 1;
+    if (this.colCount >= 2) {
+      this._evenTiler = false;
+      let effectiveWidth = (this._colCount * this.cellWidth) + ((this._colCount - 1) * this.cellSpacing);
+      let diff = totalWidth - effectiveWidth;
+      if (diff >= (this.cellWidth / 2 + (2 * this.cellSpacing))) {
+        this._evenTiler = true;
+      }
+      this._colCount += this._evenTiler ? this._colCount : (this._colCount - 1);
+    }
   }
 
   clear() {
@@ -97,7 +106,7 @@ export class RhombusTiler extends Tiler {
   }
 
   _cellRectPosition(cell) {
-    let colWrap = ((this._colCount + 1) / 2) - 1;
+    let colWrap = this._colwrap;
     let offseted = cell[0] > colWrap;
     if (!offseted) {
       let x = cell[0] * (this.cellWidth + this.cellSpacing);
