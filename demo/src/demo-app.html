@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-swatch-picker/paper-swatch-picker.html">
 
 <dom-module id="demo-app">
   <template>
@@ -61,6 +62,7 @@
         overflow-y: auto;
       }
 
+      #overlayOpacity,
       #cellWidth,
       #cellHeight,
       #cellSpacing,
@@ -75,8 +77,21 @@
         margin-right: 8px;
       }
 
+      #overlayPanel {
+        border-top: 1px solid #c8c8c8;
+        border-bottom: 1px solid #c8c8c8;
+        padding: 10px;
+        margin-top: 10px;
+      }
+
       paper-checkbox {
         margin: 10px 10px 5px 0;
+      }
+
+      paper-swatch-picker {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 100%;
+        margin: 5px 10px 5px 0;
       }
     </style>
     <div id="shell" class="horizontal layout">
@@ -84,7 +99,7 @@
         <paper-dropdown-menu-light id="gridType" label="Grid Type" on-selected-item-changed="refresh">
           <paper-listbox slot="dropdown-content" class="dropdown-content" selected="0">
             <paper-item>square</paper-item>
-            <paper-item>rhombus</paper-item>
+            <paper-item>diamond</paper-item>
           </paper-listbox>
         </paper-dropdown-menu-light>
         <div>
@@ -100,7 +115,11 @@
           <paper-checkbox id="chkImage" on-change="onImage">BG Image</paper-checkbox>
         </div>
         <div id="overlayPanel" class="hidden">
-          <paper-checkbox id="chkOverlay" checked on-change="refresh">BG Image Overlay</paper-checkbox>
+          <paper-checkbox id="chkOverlay" on-change="onImageOverlay">BG Image Overlay</paper-checkbox>
+          <div id="overlayPanelInner" class="hidden">
+            <paper-swatch-picker id="overlayColor" color="#fff" on-color-changed="refresh"></paper-swatch-picker>
+            <paper-input id="overlayOpacity" type="number" min="0" max="1" step="0.1" label="Overlay opacity" value="0.6" on-change="refresh"></paper-input>
+          </div>
         </div>
       </div>
       <div id="gridContainer" class="flex">
@@ -122,6 +141,15 @@
           this.$.overlayPanel.classList.remove("hidden");
         } else {
           this.$.overlayPanel.classList.add("hidden");
+        }
+        this.refresh();
+      }
+
+      onImageOverlay() {
+        if (this.$.chkOverlay.checked) {
+          this.$.overlayPanelInner.classList.remove("hidden");
+        } else {
+          this.$.overlayPanelInner.classList.add("hidden");
         }
         this.refresh();
       }
@@ -173,7 +201,8 @@
         if (this.$.chkImage.checked) {
           options.backgroundImage = 'images/bg' + Math.round(Math.random() * 7 + 1) + ".jpg";
           if (this.$.chkOverlay.checked) {
-            options.overlay = "rgba(255,255,255,0.5)";
+            options.overlay = this.$.overlayColor.color;
+            options.overlayOpacity = +this.$.overlayOpacity.value;
           }
         }
         return options;

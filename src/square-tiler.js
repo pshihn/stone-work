@@ -44,6 +44,18 @@ export class SquareTiler extends Tiler {
       style.backgroundPosition = "50% 50%";
       style.backgroundImage = 'url("' + options.backgroundImage + '")';
     }
+    // overlay
+    if (options.overlay && options.overlayOpacity) {
+      let overlay = document.createElement("div");
+      overlay.style.position = "absolute";
+      overlay.style.left = 0;
+      overlay.style.right = 0;
+      overlay.style.top = 0;
+      overlay.style.bottom = 0;
+      overlay.style.background = options.overlay;
+      overlay.style.opacity = options.overlayOpacity;
+      panel.appendChild(overlay);
+    }
   }
 }
 

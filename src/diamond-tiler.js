@@ -1,6 +1,6 @@
 import { Tiler, TilerRegistry } from './tiler'
 
-export class RhombusTiler extends Tiler {
+export class DiamondTiler extends Tiler {
   computeColumnCount() {
     let totalWidth = this._root.offsetWidth;
     this._colCount = Math.max(1, Math.floor(totalWidth / this.cellWidth));
@@ -25,6 +25,9 @@ export class RhombusTiler extends Tiler {
   clear() {
     super.clear();
     this.svg = this.createSvgRoot();
+    this.defs = this.createSvgNode("defs");
+    this.nodeCount = 0;
+    this.svg.appendChild(this.defs);
     this.svgHeight = 0;
   }
 
@@ -55,6 +58,7 @@ export class RhombusTiler extends Tiler {
     node.style.width = nodeRect[2] + "px";
     node.style.height = nodeRect[3] + "px";
     this._root.appendChild(node);
+    this.nodeCount++;
 
     this.addToColumn(cell[0], node);
   }
@@ -123,15 +127,35 @@ export class RhombusTiler extends Tiler {
   applyPanelStyles(panel, options) {
     let style = panel.style;
 
-    // style.stroke = "#000";
-    // style.strokeWidth = "2";
-
+    // bg-color
     if (options.backgroundColor) {
       style.fill = options.backgroundColor;
     } else {
       style.fill = "transparent";
     }
+
+    // bg-imag
+    if (options.backgroundImage) {
+      let id = "image" + this.nodeCount;
+      let pattern = this.createSvgNode("pattern", {
+        id: id,
+        width: "100%",
+        height: "100%"
+      });
+      let image = this.createSvgNode("image", {
+        x: 0,
+        y: 0,
+        width: this.cellWidth,
+        height: this.cellHeight,
+        preserveAspectRatio: 'xMinYMin slice',
+        'href': options.backgroundImage
+      });
+      pattern.appendChild(image);
+      this.defs.appendChild(pattern);
+      style.fill = "url(#" + id + ")";
+    }
+
   }
 }
 
-TilerRegistry.add("rhombus", RhombusTiler);
+TilerRegistry.add("diamond", DiamondTiler);

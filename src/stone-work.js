@@ -1,6 +1,6 @@
 import { TilerRegistry } from './tiler';
 import { SquareTiler } from './square-tiler';
-import { RhombusTiler } from './rhombus-tiler';
+import { DiamondTiler } from './diamond-tiler';
 
 export class StoneWork {
   constructor(element, tilerType, options) {
